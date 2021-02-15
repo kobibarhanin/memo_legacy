@@ -1,0 +1,36 @@
+{
+  "name": "memo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "memo.test.js",
+  "scripts": {
+    "test": "mocha --recursive",
+    "compile": "node ./ethereum/compile.js",
+    "console": "node ./client/console.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kobibarhanin/memo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kobibarhanin/memo/issues"
+  },
+  "homepage": "https://github.com/kobibarhanin/memo#readme",
+  "dependencies": {
+    "fs-extra": "^5.0.0",
+    "ganache-cli": "^6.0.3",
+    "mocha": "^4.1.0",
+    "next": "^4.1.4",
+    "next-routes": "^1.2.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.77.1",
+    "set-interval-async": "^1.0.33",
+    "solc": "^0.4.19",
+    "truffle-hdwallet-provider": "0.0.3",
+    "web3": "1.0.0-beta.26"
+  }
+}
