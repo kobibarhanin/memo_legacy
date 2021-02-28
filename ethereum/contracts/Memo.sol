@@ -13,6 +13,7 @@ contract Memo {
     address[] public users;
     
     mapping(address => Message[]) public userMemos; // for each user - the memos he is received
+    mapping(address => uint256) public userMemosCount; // for each user - the amount of memos he is received
 
     constructor() public {
         manager = msg.sender;
@@ -33,9 +34,13 @@ contract Memo {
            timestamp: now
         });
         userMemos[target].push(newMessage);
+        userMemosCount[target] +=1;
     }
     
     function getMemo(uint256 idx) public view returns (address source, string content) {
+        if (idx >= userMemosCount[msg.sender]){
+            return (0, "empty cell");
+        }
         return (userMemos[msg.sender][idx].source, userMemos[msg.sender][idx].content);
     }
     

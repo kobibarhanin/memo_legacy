@@ -7,6 +7,12 @@ async function deploy(web3, provider, contract, user, args=null) {
     return instance;
 }
 
+async function get_contract(web3, contract, address) {
+    instance = await new web3.eth.Contract(JSON.parse(contract.interface))
+    instance.options.address = address
+    return instance;
+}
+
 async function transact(method, user, args=null) {
     if (args == null){
         return await method().send({
@@ -25,3 +31,4 @@ async function transact(method, user, args=null) {
 
 exports.deploy = deploy;
 exports.transact = transact;
+exports.get_contract = get_contract;

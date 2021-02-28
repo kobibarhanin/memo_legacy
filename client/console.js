@@ -7,74 +7,42 @@ const provider = new Web3.providers.HttpProvider('http://localhost:7545');
 const web3 = new Web3(provider);
 
 
-// const Telechain = require("./build/Telechain.json");
-const Session = require("../ethereum/build/Session.json");
+const Memo = require("../ethereum/build/Memo.json");
 const utils = require("../utils");
-const readline = require("readline");
-
 
 let accounts;
-let session;
-
 
 // parse the activating account from args 
 // account = index for local address usage, e.g - 0,1,.. in the ganache server
-var account = parseInt(process.argv.slice(2)[0]);
-
-
-// create input object
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-
-rl.on("close", function() {
-    console.log("\nBYE BYE !!!");
-    process.exit(0);
-});
-
+// var account = parseInt(process.argv.slice(2)[0]);
 
 async function deploy_session(){
     accounts = await web3.eth.getAccounts();
-    session = await utils.deploy(web3, provider, Session, accounts[0], [[accounts[0],accounts[1]]]);    
+    memo = await utils.deploy(web3, provider, Memo, accounts[0]);    
 }
 
-
-async function getInput() {
-    rl.question(">> ", async function(message) {
-        if (message == "exit"){
-            rl.close();
-        } else {
-            await utils.transact(
-                session.methods.sendMessage,
-                accounts[account],
-                message
-              );
-            getInput();
-        }
-    });
+async function get_contract(address){
+    accounts = await web3.eth.getAccounts();
+    memo = await utils.get_contract(web3, Memo, address)
 }
 
-// set the listener to new session messages
-
-setIntervalAsync(async () => {
-    message = await session.methods.getMessage().call({
-        from: accounts[account],
-    });
-    console.log('from session: ' + message.content);
+async function run() {
+    try {
+    //   await deploy_session();
+    //   console.log("contract is at: " + memo._address);
+        await get_contract('0xfBb7df7FBDC89E58884DEaa32366a2FCcDB4E200');
     
-    // This should be solved on the client side with a call and not a transaction
-    await utils.transact(
-        session.methods.updateCounter,
-        accounts[account]
-      );
-    },
-    5000
-)
+        // await memo.methods.sendMemo(accounts[1], "Mate the dog").send({
+        //     from: accounts[0],
+        //     gas: '1000000'
+        // });
 
-deploy_session();
-getInput();
+      const rv = await memo.methods.getMemo(0).call({from: accounts[1]});
+      console.log('res = ' + rv.content);
+    }
+    catch(e) {
+      console.log('Catch an error: ', e)
+    }
+  }
 
-
-
+run();
