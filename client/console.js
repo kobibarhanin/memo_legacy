@@ -1,44 +1,60 @@
+// node modules
 const Web3 = require("web3");
-const { setIntervalAsync } = require('set-interval-async/dynamic')
-
+const fs = require('fs-extra');
 
 // remember to start ganache dev server
 const provider = new Web3.providers.HttpProvider('http://localhost:7545');
 const web3 = new Web3(provider);
 
-
+// load the contract
 const Memo = require("../ethereum/build/Memo.json");
 const utils = require("../utils");
 
-let accounts;
-
-// parse the activating account from args 
-// account = index for local address usage, e.g - 0,1,.. in the ganache server
-// var account = parseInt(process.argv.slice(2)[0]);
-
-async function deploy_session(){
-    accounts = await web3.eth.getAccounts();
+async function deploy_contract(accounts){
     memo = await utils.deploy(web3, provider, Memo, accounts[0]);    
+    console.log("contract deployed at: " + memo._address);
+    fs.writeFileSync("contract_address", memo._address);
+    return memo;
 }
 
-async function get_contract(address){
-    accounts = await web3.eth.getAccounts();
-    memo = await utils.get_contract(web3, Memo, address)
+async function get_contract(address=null){
+  if (!address){
+    address = fs.readFileSync("contract_address", 'utf8');
+  }
+  return await utils.get_contract(web3, Memo, address)
 }
 
 async function run() {
     try {
-    //   await deploy_session();
-    //   console.log("contract is at: " + memo._address);
-        await get_contract('0xfBb7df7FBDC89E58884DEaa32366a2FCcDB4E200');
-    
-        // await memo.methods.sendMemo(accounts[1], "Mate the dog").send({
-        //     from: accounts[0],
-        //     gas: '1000000'
-        // });
+      
+      // parse input args
+      args = process.argv.slice(2);
+      
+      // get provider account / accounts
+      accounts = await web3.eth.getAccounts();
+      source = accounts[0]
+      target = accounts[1]
 
-      const rv = await memo.methods.getMemo(0).call({from: accounts[1]});
-      console.log('res = ' + rv.content);
+      if (args[0] == 'deploy')
+        memo = await deploy_contract(accounts);
+      else
+        memo = await get_contract();
+
+      if (args[0] == 'sendMsg'){
+        await memo.methods.sendMemo(target, args[1]).send({
+          from: source,
+          gas: '1000000'
+        });
+      }
+      else if (args[0] == 'getMsg'){
+        rv = await memo.methods.getMemo(parseInt(args[1])).call({from: target});
+        console.log('getMsg: ' + rv.content);
+      }
+      else if (args[0] == 'getCnt'){
+        rv = await memo.methods.getMemoCount(target).call();
+        console.log('getCnt: ' + rv);
+      }
+
     }
     catch(e) {
       console.log('Catch an error: ', e)

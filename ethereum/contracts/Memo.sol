@@ -44,4 +44,7 @@ contract Memo {
         return (userMemos[msg.sender][idx].source, userMemos[msg.sender][idx].content);
     }
     
+    function getMemoCount(address user) public view returns (uint256 count) {
+        return userMemosCount[user];
+    }
 }
