@@ -9,7 +9,7 @@ const web3 = new Web3(provider);
 
 // load the contract
 const Memo = require("../ethereum/build/Memo.json");
-const utils = require("../utils");
+const utils = require("../common/utils");
 
 async function deploy_contract(accounts){
     memo = await utils.deploy(web3, provider, Memo, accounts[0]);    

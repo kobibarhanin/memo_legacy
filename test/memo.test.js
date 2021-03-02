@@ -6,7 +6,7 @@ const provider = ganache.provider();
 const web3 = new Web3(provider);
 
 const Memo = require("../ethereum/build/Memo.json");
-const utils = require("../utils");
+const utils = require("../common/utils");
 
 let memo;
 let accounts;
