@@ -9,9 +9,16 @@ contract Memo {
         uint256 timestamp;
     }
     
+    struct User {
+        string alias;
+        bytes pkey;
+    }
+
     address public manager;
-    address[] public users;
-    
+    // address[] public users;
+
+    mapping(address => User) public users;
+
     mapping(address => Message[]) public userMemos; // for each user - the memos he is received
     mapping(address => uint256) public userMemosCount; // for each user - the amount of memos he is received
 
@@ -19,12 +26,16 @@ contract Memo {
         manager = msg.sender;
     }
 
-    function addUser(address user) public payable {
-        users.push(user);
+    function enroll(bytes pkey, string alias) public payable {
+        User memory newUser = User({
+           alias: alias,
+           pkey: pkey
+        });
+        users[msg.sender] = newUser;
     }
 
-    function getUsers() public view returns (address[]) {
-        return users;
+    function getUserKey(address user) public view returns (bytes pkey) {
+        return users[user].pkey;
     }
 
     function sendMemo(address target, string content) public payable {

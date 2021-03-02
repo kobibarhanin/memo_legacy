@@ -32,6 +32,7 @@ async function run() {
       
       // get provider account / accounts
       accounts = await web3.eth.getAccounts();
+
       source = accounts[0]
       target = accounts[1]
 
@@ -40,7 +41,18 @@ async function run() {
       else
         memo = await get_contract();
 
-      if (args[0] == 'sendMsg'){
+      if (args[0] == 'enroll'){
+        // TODO: take public key and alias from user
+        await memo.methods.enroll('0x12345678', 'myalias').send({
+          from: source,
+          gas: '1000000'
+        });
+      }
+      else if (args[0] == 'getUserKey'){
+        rv = await memo.methods.getUserKey(source).call({from: source});
+        console.log('getUserKey: ' + rv);
+      }
+      else if (args[0] == 'sendMsg'){
         await memo.methods.sendMemo(target, args[1]).send({
           from: source,
           gas: '1000000'
