@@ -1,6 +1,7 @@
 // node modules
 const Web3 = require("web3");
 const fs = require('fs-extra');
+const NodeRSA = require('node-rsa');
 
 // remember to start ganache dev server
 const provider = new Web3.providers.HttpProvider('http://localhost:7545');
@@ -42,25 +43,50 @@ async function run() {
         memo = await get_contract();
 
       if (args[0] == 'enroll'){
-        // TODO: take public key and alias from user
-        await memo.methods.enroll('0x12345678', 'myalias').send({
-          from: source,
-          gas: '1000000'
+        alias = args[1];
+
+        const key = new NodeRSA({b: 512});
+
+        pk_raw = key.exportKey('public');
+        fs.writeFileSync("private_key_"+alias, key.exportKey('private'));
+        
+        const buf = Buffer.from(pk_raw, 'ascii');
+        pk_enc = '0x' + buf.toString('hex');
+        await memo.methods.enroll(pk_enc, alias).send({
+          from: alias=='kobi' ? source : target,
+          gas: '1000000' // max gas allowed by ganache server
         });
+        console.log('user enrolled successfully')
       }
       else if (args[0] == 'getUserKey'){
         rv = await memo.methods.getUserKey(source).call({from: source});
-        console.log('getUserKey: ' + rv);
+        const buf = Buffer.from(rv.slice(2), 'hex');
+        pk_dec = buf.toString('ascii');
+        console.log('getUserKey: ' + pk_dec);
       }
       else if (args[0] == 'sendMsg'){
-        await memo.methods.sendMemo(target, args[1]).send({
+
+        rv = await memo.methods.getUserKey(target).call({from: source});
+        const buf = Buffer.from(rv.slice(2), 'hex');
+        pk_dec = buf.toString('ascii');
+        const key = new NodeRSA(pk_dec);
+        const encrypted = key.encrypt(args[1], 'base64');
+
+        await memo.methods.sendMemo(target, encrypted).send({
           from: source,
           gas: '1000000'
         });
       }
       else if (args[0] == 'getMsg'){
         rv = await memo.methods.getMemo(parseInt(args[1])).call({from: target});
-        console.log('getMsg: ' + rv.content);
+        if (rv.content == 'empty cell'){
+          console.log('empty cell')
+          return
+        }
+        private_key = fs.readFileSync('private_key_mate', 'utf8')
+        const key = new NodeRSA(private_key);
+        const decrypted = key.decrypt(rv.content, 'utf8');
+        console.log('getMsg: ' + decrypted);
       }
       else if (args[0] == 'getCnt'){
         rv = await memo.methods.getMemoCount(target).call();

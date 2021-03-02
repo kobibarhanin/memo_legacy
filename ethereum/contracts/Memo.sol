@@ -15,8 +15,7 @@ contract Memo {
     }
 
     address public manager;
-    // address[] public users;
-
+    
     mapping(address => User) public users;
 
     mapping(address => Message[]) public userMemos; // for each user - the memos he is received

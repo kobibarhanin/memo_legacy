@@ -121,3 +121,5 @@ dist
 build/
 TODO.md
 contract_address
+private_key*
+client/tester.js
