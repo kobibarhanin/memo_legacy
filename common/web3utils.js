@@ -1,6 +1,6 @@
 
 async function deploy(web3, provider, contract, user, args=null) {
-    instance = await new web3.eth.Contract(JSON.parse(contract.interface))
+    instance = await new web3.Contract(JSON.parse(contract.interface))
     .deploy({ data: contract.bytecode, arguments: args })
     .send({ from: user, gas: '1000000' });
     instance.setProvider(provider);
@@ -8,7 +8,7 @@ async function deploy(web3, provider, contract, user, args=null) {
 }
 
 async function get_contract(web3, contract, address) {
-    instance = await new web3.eth.Contract(JSON.parse(contract.interface))
+    instance = await new web3.Contract(JSON.parse(contract.interface))
     instance.options.address = address
     return instance;
 }

@@ -57,4 +57,8 @@ contract Memo {
     function getMemoCount(address user) public view returns (uint256 count) {
         return userMemosCount[user];
     }
+
+     function getUserAlias(address user) public view returns (string alias) {
+        return users[user].alias;
+    }   
 }

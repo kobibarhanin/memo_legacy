@@ -1,5 +1,6 @@
 // node modules
-const Web3 = require("web3");
+
+const Web3 = require('web3-eth');
 const fs = require('fs-extra');
 const NodeRSA = require('node-rsa');
 
@@ -9,7 +10,7 @@ const web3 = new Web3(provider);
 
 // load the contract
 const Memo = require("../ethereum/build/Memo.json");
-const utils = require("../common/utils");
+const utils = require("../common/web3utils");
 
 async function deploy_contract(accounts){
     memo = await utils.deploy(web3, provider, Memo, accounts[0]);    
@@ -25,6 +26,16 @@ async function get_contract(address=null){
   return await utils.get_contract(web3, Memo, address)
 }
 
+function encrypt(){
+
+}
+
+function decrypt(msg){
+  private_key = fs.readFileSync('private_key_user0', 'utf8')
+  const key = new NodeRSA(private_key);
+  return key.decrypt(msg, 'utf8');
+}
+
 async function run() {
     try {
       
@@ -32,10 +43,10 @@ async function run() {
       args = process.argv.slice(2);
       
       // get provider account / accounts
-      accounts = await web3.eth.getAccounts();
+      accounts = await web3.getAccounts();
 
       source = accounts[0]
-      target = accounts[1]
+      target = accounts[0]
 
       if (args[0] == 'deploy')
         memo = await deploy_contract(accounts);
@@ -83,10 +94,17 @@ async function run() {
           console.log('empty cell')
           return
         }
-        private_key = fs.readFileSync('private_key_mate', 'utf8')
-        const key = new NodeRSA(private_key);
-        const decrypted = key.decrypt(rv.content, 'utf8');
-        console.log('getMsg: ' + decrypted);
+        alias = await memo.methods.getUserAlias(rv.source).call({from: target});
+        console.log(alias + ': ' + decrypt(rv.content));
+      }
+      else if (args[0] == 'getAllMsgs'){        
+        msgs_count = await memo.methods.getMemoCount(target).call();
+        for (i = 0; i< msgs_count; i++){
+          rv = await memo.methods.getMemo(i).call({from: source});
+          alias = await memo.methods.getUserAlias(rv.source).call({from: target});
+          console.log(i + ') ' + alias + ": " + decrypt(rv.content));
+        }
+
       }
       else if (args[0] == 'getCnt'){
         rv = await memo.methods.getMemoCount(target).call();

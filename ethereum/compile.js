@@ -24,6 +24,8 @@ for (let contract in compiled) {
   );
 }
 
+console.log('contract compiled successfully');
+
 // export compiled contracts if required directly
 // module.exports = {
 //     Memo: compiled[':Memo'],
