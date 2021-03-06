@@ -115,11 +115,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-.archive
 .vscode
-.dev/
 build/
 TODO.md
-contract_address
-private_key*
+
 client/tester.js
