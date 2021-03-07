@@ -7,16 +7,21 @@ npm run --silent compile
 rm -rf "$HOME/.memo"
 
 # deploy contract to local ethereum network
-npm run --silent console deploy
+npm run --silent deploy
 
 # enroll a user to the contract
-npm run --silent console enroll user0
+npm run --silent memo enroll user0
 
 # send some messages
-npm run --silent console send "henlo fren"
-npm run --silent console send "whats up"
-npm run --silent console send "this is awsome"
+echo "--------------------------------------"
+npm run --silent memo send user0 "henlo fren" 
+echo "--------------------------------------"
+npm run --silent memo send user0 "whats up"
+echo "--------------------------------------"
+npm run --silent memo send user0 "this is awsome"
+echo "--------------------------------------"
 
 # test getting messeges 
-npm run --silent console get 0
-npm run --silent console getAll
+npm run --silent memo get 0
+echo "--------------------------------------"
+npm run --silent memo get all
