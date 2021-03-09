@@ -1,19 +1,26 @@
 const assert = require("assert");
 const ganache = require("ganache-cli");
 const Web3 = require("web3");
+const NodeRSA = require('node-rsa');
 
 const provider = ganache.provider();
 const web3 = new Web3(provider);
-
 const Memo = require("../ethereum/build/Memo.json");
-const utils = require("../common/utils");
 
 let memo;
 let accounts;
 
+async function deploy(web3, provider, contract, user) {
+  instance = await new web3.eth.Contract(JSON.parse(contract.interface))
+  .deploy({ data: contract.bytecode })
+  .send({ from: user, gas: '1000000' });
+  instance.setProvider(provider);
+  return instance;
+}
+
 beforeEach(async () => {
   accounts = await web3.eth.getAccounts();
-  memo = await utils.deploy(web3, provider, Memo, accounts[0]);
+  memo = await deploy(web3, provider, Memo, accounts[0]);
 });
 
 describe("Memo", () => {
@@ -22,19 +29,32 @@ describe("Memo", () => {
   });
 
   it("adds a user to memo", async () => {
-    await utils.transact(memo.methods.addUser, accounts[0], accounts[0]);
-    const users = await memo.methods.getUsers().call();
-    assert.ok(users);
-  });
-
-  it("send memo", async () => {
-
-    await memo.methods.sendMemo(accounts[1], "hello there!").send({
+    
+    alias = 'user0';
+    const key = new NodeRSA({b: 512});
+    pub_key_raw = key.exportKey('public');
+    // prv_key_raw = key.exportKey('private');
+    
+    const buf = Buffer.from(pub_key_raw, 'ascii');
+    pub_key_enc = '0x' + buf.toString('hex');
+    await memo.methods.enroll(pub_key_enc, alias).send({
       from: accounts[0],
       gas: '1000000'
     });
 
-    const rv = await memo.methods.getMemo(0).call({from: accounts[1]});
+    const ualias = await memo.methods.getUserAlias(accounts[0]).call();
+    assert.ok(ualias == alias);
+  });
+
+  it("send memo without encryption", async () => {
+
+    await memo.methods.sendMemo(accounts[0], "hello there!").send({
+      from: accounts[0],
+      gas: '1000000'
+    });
+
+    const rv = await memo.methods.getMemo(0).call({from: accounts[0]});
+  
     assert.ok(rv.source == accounts[0]);
     assert.ok(rv.content == "hello there!");
   });
