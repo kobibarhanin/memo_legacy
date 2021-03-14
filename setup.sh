@@ -1,4 +1,7 @@
- #! /bin/bash
+#! /bin/bash
+
+# ethereum network [local / rinkeby]
+NETWORK=$1
 
 # compile the contract
 npm run --silent compile
@@ -6,13 +9,16 @@ npm run --silent compile
 # clear current installation
 rm -rf "$HOME/.memo"
 
-# deploy contract to local ethereum network
-npm run --silent deploy
+# deploy contract to ethereum network
+npm run --silent deploy $NETWORK
 
-# enroll a user to the contract
-npm run --silent memo enroll user0
+# set memo run mode
+npm run --silent memo set-global-conf active-mode $NETWORK
 
-# send some messages
+# setup a user on the memo contract
+npm run --silent memo setup $NETWORK
+
+# send some messages (to self)
 echo "--------------------------------------"
 npm run --silent memo send user0 "henlo fren" 
 echo "--------------------------------------"

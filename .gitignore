@@ -118,5 +118,3 @@ dist
 .vscode
 build/
 TODO.md
-
-client/tester.js

@@ -1,0 +1,22 @@
+{
+	"defualts":{},
+	"active-mode": "local",
+	"modes":{
+		"local":{
+			"type": "local",
+			"contract":"0xad24EaBD2Df51d36f0A75DB894945501F41bc91e",
+			"provider": {
+				"type": "http",
+				"gw": "http://localhost:7545"
+			}
+		},
+		"rinkeby":{
+			"type": "rinkeby",
+			"contract":"0x96ab6fed95723A8FC8291E918DAc5bc80539E666",
+			"provider": {
+				"type": "hdwallet",
+				"gw": "https://rinkeby.infura.io/v3/acd25b1c38534e99abd0f05031d08058"
+			}
+		}
+	}
+}

@@ -8,7 +8,7 @@
     "compile": "node ./ethereum/compile.js",
     "deploy": "node ./ethereum/deploy.js",
     "memo": "node ./client/console.js",
-    "tester": "node ./client/tester.js"
+    "tester": "node ./.archive/tester.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
     "commander": "^7.1.0",
     "fs-extra": "^5.0.0",
     "ganache-cli": "^6.0.3",
+    "inquirer": "^8.0.0",
     "mocha": "^4.1.0",
     "node-forge": "^0.10.0",
     "node-rsa": "^1.1.1",
