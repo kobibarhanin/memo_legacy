@@ -1,8 +1,9 @@
 {
-  "name": "memo",
+  "name": "mem0",
   "version": "1.0.0",
   "description": "",
-  "main": "memo.test.js",
+  "main": "client/console.js",
+  "bin": "bin/memo",
   "scripts": {
     "test": "mocha --recursive",
     "compile": "node ./ethereum/compile.js",
@@ -14,7 +15,7 @@
     "type": "git",
     "url": "git+https://github.com/kobibarhanin/memo.git"
   },
-  "author": "",
+  "author": "kobibarhanin",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/kobibarhanin/memo/issues"
