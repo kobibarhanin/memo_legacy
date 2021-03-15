@@ -9,7 +9,6 @@ const homedir = require('os').homedir();
 
 const { encrypt, decrypt } = require('../common/crypto')
 const { config } = require('../common/config')
-const { env } = require('../client/envs')
 
 
 conf = new config()
@@ -111,44 +110,38 @@ async function run_cli () {
   cli
   .command('setup')
   .arguments('[arg]')
-  .description('cmd description')
+  .description('setup your client (wallet) for memo')
   .action(async(arg)=>{
 
+    // to support dev mode
     if (arg != null){
-      defaults = env(arg)
-
+      defaults = JSON.parse(fs.readFileSync('client/user-config.json', 'utf8'))[arg];
       alias = defaults.alias;
       wallet_address = defaults.wallet_address;
       mode = defaults.mode;
       mnemonic = defaults.mnemonic;
-    }
-    else{
-      defaults = env('local');
+    } 
+    else {
       answers = await inquirer.prompt([
         {
             type: 'list',
             name: 'mode',
             message: 'select mode to setup:',
             choices: ['local', 'rinkeby'],
-            default: defaults.mode,
         },
         {
             name: 'alias',
             message: 'choose your alias:',
-            default: defaults.alias,
         },
         {
             name: 'wallet_address',
             message: 'provide your wallet address:',
-            default: defaults.wallet_address,
         },
         {
-          name: 'mnemonic',
-          message: 'insert your mnemonic:',
-          default: defaults.mnemonic,
-      },
+            name: 'mnemonic',
+            message: 'insert your mnemonic:',
+        }
       ]);
-    
       alias = answers.alias;
       wallet_address = answers.wallet_address;
       mode = answers.mode;

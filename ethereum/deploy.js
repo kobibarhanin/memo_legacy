@@ -1,3 +1,4 @@
+const fs = require('fs-extra');
 const Web3 = require('web3-eth');
 const HDWalletProvider = require('truffle-hdwallet-provider')
 
@@ -9,8 +10,8 @@ mode = process.argv.slice(2)[0];
 if (mode == 'local'){
     provider = new Web3.providers.HttpProvider('http://localhost:7545');
 } else {
-    mnemonic = 'ten jewel message joke radio cushion few worry tiny shock hidden two';
-    infura_gw = 'https://rinkeby.infura.io/v3/acd25b1c38534e99abd0f05031d08058';
+    mnemonic = JSON.parse(fs.readFileSync('client/user-config.json', 'utf8'))[mode].mnemonic;
+    infura_gw = new config().context(mode)['provider']['gw'];
     provider = new HDWalletProvider(mnemonic, infura_gw);
 }
 
