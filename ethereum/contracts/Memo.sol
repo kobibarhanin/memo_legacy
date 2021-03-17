@@ -38,7 +38,13 @@ contract Memo {
         usersAliases[alias] = newUser;
     }
 
-    function sendMemo(address target, string content) public payable {
+    function sendMemoToAlias(string alias, string content) public payable {
+        address target = getUserAddress(alias);
+        require(target != address(0), 'alias unknown');
+        _sendMemo(target, content);
+    }
+    
+    function _sendMemo(address target, string content) internal {
         Message memory newMessage = Message({
            content: content,
            source: msg.sender,
@@ -58,9 +64,11 @@ contract Memo {
     function getMemoCount(address user) public view returns (uint256 count) {
         return userMemosCount[user];
     }
-
-    function getUserKey(address user) public view returns (bytes pkey) {
-        return users[user].pkey;
+    
+    function getUserKeyByAlias(string alias) public view returns (bytes pkey) {
+        address target = getUserAddress(alias);
+        require(target != address(0), 'alias unknown');
+        return users[target].pkey;
     }
     
     function getUserAlias(address user) public view returns (string alias) {
@@ -70,4 +78,15 @@ contract Memo {
     function getUserAddress(string alias) public view returns (address uAddress) {
         return usersAliases[alias].uAddress;
     }   
+    
+    // deserted functions due to contract byte code over 24k:
+    
+    // function sendMemoToAddress(address target, string content) public payable {
+    //     require(bytes(getUserAlias(target)).length != 0, 'target address unknown');
+    //     _sendMemo(target, content);
+    // }
+    
+    // function getUserKeyByAddress(address user) public view returns (bytes pkey) {
+    //     return users[user].pkey;
+    // }
 }
