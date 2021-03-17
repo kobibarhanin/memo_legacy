@@ -28,6 +28,7 @@ contract Memo {
     }
 
     function enroll(bytes pkey, string alias) public payable {
+        require(getUserAddress(alias) == address(0), 'alias already taken');
         User memory newUser = User({
            alias: alias,
            pkey: pkey,

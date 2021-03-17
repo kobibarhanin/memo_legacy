@@ -165,11 +165,16 @@ async function run_cli () {
 
     const buf = Buffer.from(pub_key_raw, 'ascii');
     pk_enc = '0x' + buf.toString('hex');
-    await memo.methods.enroll(pk_enc, alias).send({
-      from: source,
-      gas: '1000000'
-    });
-    console.log('user enrolled successfully')
+    try{
+      await memo.methods.enroll(pk_enc, alias).send({
+        from: source,
+        gas: '1000000'
+      });
+      console.log('user enrolled successfully')
+    } catch (err) {
+      // the first key of the error.data is the reverted tx id
+      console.log('failed enrolling user: ' + err.data[Object.keys(err.data)[0]].reason)
+    }
   });
 
   cli

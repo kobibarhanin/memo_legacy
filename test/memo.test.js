@@ -46,6 +46,28 @@ describe("Memo", () => {
     assert.ok(ualias == alias);
   });
 
+  it("fails to add another user with same alias", async () => {
+    
+    alias = 'user0';
+    const key = new NodeRSA({b: 512});
+    pub_key_raw = key.exportKey('public');
+    
+    const buf = Buffer.from(pub_key_raw, 'ascii');
+    pub_key_enc = '0x' + buf.toString('hex');
+    rv = await memo.methods.enroll(pub_key_enc, alias).send({
+      from: accounts[0],
+      gas: '1000000'
+    });
+
+    const re_enroll = async () => await memo.methods.enroll(pub_key_enc, alias).send({
+      from: accounts[0],
+      gas: '1000000'
+    });
+    
+    await assert.rejects(re_enroll)
+
+  });
+
   it("send memo without encryption", async () => {
 
     await memo.methods.sendMemo(accounts[0], "hello there!").send({
