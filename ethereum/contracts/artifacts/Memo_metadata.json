@@ -1,0 +1,269 @@
+{
+	"compiler": {
+		"version": "0.4.26+commit.4563c3fc"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"name": "user",
+						"type": "address"
+					}
+				],
+				"name": "getMemoCount",
+				"outputs": [
+					{
+						"name": "count",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"name": "",
+						"type": "address"
+					},
+					{
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "userMemos",
+				"outputs": [
+					{
+						"name": "content",
+						"type": "string"
+					},
+					{
+						"name": "source",
+						"type": "address"
+					},
+					{
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "manager",
+				"outputs": [
+					{
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"name": "alias",
+						"type": "string"
+					}
+				],
+				"name": "getUserAddress",
+				"outputs": [
+					{
+						"name": "uAddress",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "userMemosCount",
+				"outputs": [
+					{
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"name": "idx",
+						"type": "uint256"
+					}
+				],
+				"name": "getMemo",
+				"outputs": [
+					{
+						"name": "source",
+						"type": "address"
+					},
+					{
+						"name": "content",
+						"type": "string"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"name": "alias",
+						"type": "string"
+					},
+					{
+						"name": "content",
+						"type": "string"
+					}
+				],
+				"name": "sendMemoToAlias",
+				"outputs": [],
+				"payable": true,
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"name": "alias",
+						"type": "string"
+					}
+				],
+				"name": "getUserKeyByAlias",
+				"outputs": [
+					{
+						"name": "pkey",
+						"type": "bytes"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "users",
+				"outputs": [
+					{
+						"name": "alias",
+						"type": "string"
+					},
+					{
+						"name": "pkey",
+						"type": "bytes"
+					},
+					{
+						"name": "uAddress",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"name": "user",
+						"type": "address"
+					}
+				],
+				"name": "getUserAlias",
+				"outputs": [
+					{
+						"name": "alias",
+						"type": "string"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"name": "pkey",
+						"type": "bytes"
+					},
+					{
+						"name": "alias",
+						"type": "string"
+					}
+				],
+				"name": "enroll",
+				"outputs": [],
+				"payable": true,
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			}
+		],
+		"devdoc": {
+			"methods": {}
+		},
+		"userdoc": {
+			"methods": {}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"Users/kobarhan/workspace/memo/ethereum/contracts/Memo.sol": "Memo"
+		},
+		"evmVersion": "byzantium",
+		"libraries": {},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"Users/kobarhan/workspace/memo/ethereum/contracts/Memo.sol": {
+			"keccak256": "0x05bcc3f2493e4e4aa385aea71f276a0e0f46a08118e6c6f6331b4de145e116e2",
+			"urls": [
+				"bzzr://8e9143428e51cc928f0ff4d4c841397445ce0eb5faebcdad27e5e9c8ec516e38"
+			]
+		}
+	},
+	"version": 1
+}
